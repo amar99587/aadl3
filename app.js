@@ -4,8 +4,15 @@ const { Pool } = require('pg');
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  // Other CORS headers like Access-Control-Allow-Methods, Access-Control-Allow-Headers can be added as needed.
+  next();
+});
+
 app.use(express.json());
 app.use(express.static('public'));
+
 
 // PostgreSQL setup
 const db = new Pool({
