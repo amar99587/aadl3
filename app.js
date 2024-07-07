@@ -4,8 +4,6 @@ const { Pool } = require('pg');
 const app = express();
 const port = process.env.PORT || 3000;
 
-console.log('req started');
-
 // Configure CORS middleware
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*'); // Replace * with your allowed origins in production
@@ -34,6 +32,7 @@ const db = new Pool({
 // User registration
 app.post('/register', async (req, res) => {
   const { email, fcmToken } = req.body;
+  console.log(email);
   try {
     await db.query(
       'INSERT INTO users (email, fcm_token) VALUES ($1, $2) ON CONFLICT (email) DO UPDATE SET fcm_token = $2',
