@@ -4,11 +4,20 @@ const { Pool } = require('pg');
 const app = express();
 const port = process.env.PORT || 3000;
 
+console.log('req started');
+
+// Configure CORS middleware
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  // Other CORS headers like Access-Control-Allow-Methods, Access-Control-Allow-Headers can be added as needed.
-  next();
+  res.setHeader('Access-Control-Allow-Origin', '*'); // Replace * with your allowed origins in production
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // Include Content-Type here
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200); // Respond to OPTIONS requests with 200 OK
+  } else {
+    next(); // Pass control to the next middleware
+  }
 });
+
 
 app.use(express.json());
 app.use(express.static('public'));
