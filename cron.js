@@ -10,13 +10,13 @@ admin.initializeApp({
 
 // PostgreSQL setup
 const db = new Pool({
-  connectionString: "postgresql://aadl3_user:jxq9LlVDL9B9f9TyhhfMiukZUZLzrP1w@dpg-cq5g4508fa8c7386vpmg-a/aadl3",
+  connectionString: "postgresql://aadl3_user:jxq9LlVDL9B9f9TyhhfMiukZUZLzrP1w@dpg-cq5g4508fa8c7386vpmg-a.frankfurt-postgres.render.com/aadl3",
   ssl: {
     rejectUnauthorized: false
   }
 });
 
-const websiteUrl = 'https://proecole.com/';
+const websiteUrl = process.env.websiteUrl || 'https://proecole.com/';
 
 async function checkWebsiteStatus(url) {
   try {
@@ -30,6 +30,7 @@ async function checkWebsiteStatus(url) {
 async function sendNotifications(message) {
   try {
     const { rows } = await db.query('SELECT fcm_token FROM users');
+    console.log(rows);
     const tokens = rows.map(row => row.fcm_token);
     
     if (tokens.length === 0) {
