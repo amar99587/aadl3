@@ -9,14 +9,14 @@ admin.initializeApp({
 });
 
 // PostgreSQL setup
-const pool = new Pool({
+const db = new Pool({
   connectionString: "postgresql://aadl3_user:jxq9LlVDL9B9f9TyhhfMiukZUZLzrP1w@dpg-cq5g4508fa8c7386vpmg-a/aadl3",
   ssl: {
     rejectUnauthorized: false
   }
 });
 
-const websiteUrl = 'https://aadl3inscription2024.dz/';
+const websiteUrl = 'https://proecole.com/';
 
 async function checkWebsiteStatus(url) {
   try {
@@ -29,7 +29,7 @@ async function checkWebsiteStatus(url) {
 
 async function sendNotifications(message) {
   try {
-    const { rows } = await pool.query('SELECT fcm_token FROM users');
+    const { rows } = await db.query('SELECT fcm_token FROM users');
     const tokens = rows.map(row => row.fcm_token);
     
     if (tokens.length === 0) {
@@ -62,7 +62,7 @@ async function main() {
   }
 
   // Close the database connection
-  await pool.end();
+  await db.end();
 }
 
 main().catch(console.error);
