@@ -9,7 +9,7 @@ app.use(express.static('public'));
 
 // PostgreSQL setup
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: "postgresql://aadl3_user:jxq9LlVDL9B9f9TyhhfMiukZUZLzrP1w@dpg-cq5g4508fa8c7386vpmg-a/aadl3",
   ssl: {
     rejectUnauthorized: false
   }
