@@ -3,7 +3,7 @@ const axios = require('axios');
 const { Pool } = require('pg');
 
 // Firebase setup
-const serviceAccount = require("./aadl-3-firebase-adminsdk.json");
+const serviceAccount = require("./aadl-3-firebase-adminsdk-xl3aw-fcb65b0893.json");
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
