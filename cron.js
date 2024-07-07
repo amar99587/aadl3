@@ -5,7 +5,7 @@ const { Pool } = require('pg');
 // Firebase setup
 const serviceAccount = require("./aadl-3-firebase-adminsdk.json");
 admin.initializeApp({
-  credential: admin.credential.cert(`${serviceAccount}`)
+  credential: admin.credential.cert(serviceAccount)
 });
 
 // PostgreSQL setup
