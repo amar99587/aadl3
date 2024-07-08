@@ -38,7 +38,7 @@ const db = new Pool({
   }
 });
 
-const websiteUrl = process.env.websiteUrl || 'https://proecole.com/';
+const websiteUrl = process.env.websiteUrl;
 
 // User registration
 app.post('/register', async (req, res) => {
