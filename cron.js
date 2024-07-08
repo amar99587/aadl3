@@ -56,20 +56,14 @@ async function sendNotifications(message) {
       tokens: tokens,
       notification: {
         title: 'AADL Website Status Update',
-        body: message,
-        click_action: websiteUrl // Add this line
+        body: message
       },
       data: {
         url: websiteUrl // Add this line
       }
     });
-response.responses.forEach((res, index) => {
-      if (!res.success) {
-        console.error(`Error for token ${tokens[index]}:`, res.error);
-      }
-    });
+
     console.log('Notifications sent successfully:', response.successCount);
-console.log('Response from sendMulticast:', response);
   } catch (error) {
     console.error('Error sending notifications:', error);
   }
@@ -81,7 +75,7 @@ async function main() {
   
   if (isOnline) {
     console.log('Website is online.', 'Sending notifications...');
-    await sendNotifications('AADL website is now online');
+    await sendNotifications('AADL website is now online,Click here to register for AADL');
   } else {
     console.log('Website is offline.');
 
