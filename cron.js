@@ -74,7 +74,7 @@ async function main() {
   const isOnline = await checkWebsiteStatus(websiteUrl);
   
   if (isOnline) {
-    console.log('Website is online.\n', 'Sending notifications...');
+    console.log('Website is online.\nSending notifications...');
     await sendNotifications('AADL website is now online,Click here to register for AADL');
   } else {
     console.log('Website is offline.');
