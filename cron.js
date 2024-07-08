@@ -31,7 +31,7 @@ const db = new Pool({
   }
 });
 
-const websiteUrl = process.env.websiteUrl || 'https://proecole.com/';
+const websiteUrl = process.env.websiteUrl;
 
 async function checkWebsiteStatus(url) {
   try {
