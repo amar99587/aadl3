@@ -26,3 +26,41 @@ messaging.onBackgroundMessage((payload) => {
 
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
+
+self.addEventListener('notificationclick', function(event) {
+  const clickAction = event.notification.data.click_action;
+
+  event.notification.close(); // Close the notification
+
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(windowClients => {
+      // If there is an open window/tab, focus it
+      for (var i = 0; i < windowClients.length; i++) {
+        var client = windowClients[i];
+        if (client.url === clickAction && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      // Otherwise, open a new tab/window with the click_action URL
+      if (clients.openWindow) {
+        return clients.openWindow(clickAction);
+      }
+    })
+  );
+});
+
+// Make sure you handle incoming messages to display notifications
+self.addEventListener('push', function(event) {
+  const data = event.data.json();
+
+  const options = {
+    body: data.notification.body,
+    data: {
+      click_action: data.data.click_action // Ensure click_action is included in the data
+    }
+  };
+
+  event.waitUntil(
+    self.registration.showNotification(data.notification.title, options)
+  );
+});
