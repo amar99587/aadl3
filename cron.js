@@ -63,6 +63,11 @@ async function sendNotifications(message) {
         url: websiteUrl // Add this line
       }
     });
+response.responses.forEach((res, index) => {
+      if (!res.success) {
+        console.error(`Error for token ${tokens[index]}:`, res.error);
+      }
+    });
     console.log('Notifications sent successfully:', response.successCount);
 console.log('Response from sendMulticast:', response);
   } catch (error) {
