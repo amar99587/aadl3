@@ -1,5 +1,4 @@
 const admin = require('firebase-admin');
-const cron = require('node-cron');
 const dotenv = require("dotenv");
 const axios = require('axios');
 const { Pool } = require('pg');
@@ -45,6 +44,7 @@ async function checkWebsiteStatus(url) {
 async function sendNotifications(message) {
   try {
     const { rows } = await db.query('SELECT fcm_token FROM users');
+    console.log(rows);
     const tokens = rows.map(row => row.fcm_token);
     
     if (tokens.length === 0) {
@@ -62,7 +62,6 @@ async function sendNotifications(message) {
       data: {
         url: websiteUrl // Add this line
       }
-      }
     });
     console.log('Notifications sent successfully:', response.successCount);
   } catch (error) {
@@ -79,21 +78,10 @@ async function main() {
     await sendNotifications('AADL website is now online');
   } else {
     console.log('Website is offline.');
+
+    // Close the database connection
+    await db.end();
   }
 }
 
-// Schedule cron job to run every minute
-cron.schedule('* * * * *', async () => {
-  try {
-    await main();
-  } catch (error) {
-    console.error('Error in cron job:', error);
-  }
-});
-
-// Handle process termination
-process.on('SIGINT', async () => {
-  console.log('Closing database pool...');
-  await db.end();
-  process.exit(0);
-});
+main().catch(console.error);
