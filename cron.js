@@ -45,7 +45,6 @@ async function checkWebsiteStatus(url) {
 async function sendNotifications(message) {
   try {
     const { rows } = await db.query('SELECT fcm_token FROM users');
-    console.log(rows);
     const tokens = rows.map(row => row.fcm_token);
     
     if (tokens.length === 0) {
@@ -57,7 +56,12 @@ async function sendNotifications(message) {
       tokens: tokens,
       notification: {
         title: 'AADL Website Status Update',
-        body: message
+        body: message,
+        click_action: websiteUrl // Add this line
+      },
+      data: {
+        url: websiteUrl // Add this line
+      }
       }
     });
     console.log('Notifications sent successfully:', response.successCount);
@@ -67,7 +71,7 @@ async function sendNotifications(message) {
 }
 
 async function main() {
-  console.log('Checking website status...');
+  console.log(`Checking website "${websiteUrl}" status...`);
   const isOnline = await checkWebsiteStatus(websiteUrl);
   
   if (isOnline) {
