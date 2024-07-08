@@ -44,7 +44,6 @@ async function checkWebsiteStatus(url) {
 async function sendNotifications(message) {
   try {
     const { rows } = await db.query('SELECT fcm_token FROM users');
-    console.log(rows);
     const tokens = rows.map(row => row.fcm_token);
     
     if (tokens.length === 0) {
