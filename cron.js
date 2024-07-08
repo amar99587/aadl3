@@ -51,7 +51,7 @@ async function sendNotifications(message) {
       return;
     }
 
-    console.log(`Tokens length : ${tokens.length}`);
+    console.log(`Tokens : ${tokens.length}`, tokens);
     const response = await admin.messaging().sendMulticast({
       tokens: tokens,
       notification: {
@@ -64,6 +64,7 @@ async function sendNotifications(message) {
       }
     });
     console.log('Notifications sent successfully:', response.successCount);
+console.log('Response from sendMulticast:', response);
   } catch (error) {
     console.error('Error sending notifications:', error);
   }
