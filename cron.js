@@ -1,6 +1,10 @@
 const admin = require('firebase-admin');
+const cron = require('node-cron');
+const dotenv = require("dotenv");
 const axios = require('axios');
 const { Pool } = require('pg');
+
+dotenv.config();
 
 // Firebase setup
 admin.initializeApp({
@@ -21,13 +25,13 @@ admin.initializeApp({
 
 // PostgreSQL setup
 const db = new Pool({
-  connectionString: "postgresql://aadl3_user:jxq9LlVDL9B9f9TyhhfMiukZUZLzrP1w@dpg-cq5g4508fa8c7386vpmg-a/aadl3",
+  connectionString: "postgresql://aadl3_user:jxq9LlVDL9B9f9TyhhfMiukZUZLzrP1w@dpg-cq5g4508fa8c7386vpmg-a.frankfurt-postgres.render.com/aadl3",
   ssl: {
     rejectUnauthorized: false
   }
 });
 
-const websiteUrl = process.env.website_url;
+const websiteUrl = process.env.websiteUrl || 'https://proecole.com/';
 
 async function checkWebsiteStatus(url) {
   try {
@@ -41,6 +45,7 @@ async function checkWebsiteStatus(url) {
 async function sendNotifications(message) {
   try {
     const { rows } = await db.query('SELECT fcm_token FROM users');
+    console.log(rows);
     const tokens = rows.map(row => row.fcm_token);
     
     if (tokens.length === 0) {
@@ -62,7 +67,7 @@ async function sendNotifications(message) {
 }
 
 async function main() {
-  console.log(`Checking website "${websiteUrl}" status...`);
+  console.log('Checking website status...');
   const isOnline = await checkWebsiteStatus(websiteUrl);
   
   if (isOnline) {
@@ -71,9 +76,20 @@ async function main() {
   } else {
     console.log('Website is offline.');
   }
-
-  // Close the database connection
-  await db.end();
 }
 
-main().catch(console.error);
+// Schedule cron job to run every minute
+cron.schedule('* * * * *', async () => {
+  try {
+    await main();
+  } catch (error) {
+    console.error('Error in cron job:', error);
+  }
+});
+
+// Handle process termination
+process.on('SIGINT', async () => {
+  console.log('Closing database pool...');
+  await db.end();
+  process.exit(0);
+});
