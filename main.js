@@ -30,32 +30,44 @@ async function requestNotificationPermission() {
   }
 }
 
-document.getElementById('register').addEventListener('click', async () => {
-  const email = document.getElementById('email').value;
-  if (!email) {
-    alert('Please enter your email');
-    return;
-  }
+const register = document.getElementById('register');;
+let loading;
 
-  try {
-    const token = await requestNotificationPermission();
-    console.log({ email, fcmToken: token });
-    const response = await fetch('https://aadl3.onrender.com/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, fcmToken: token }),
-    });
-
-    if (response.ok) {
-      alert('Registered successfully! You will be notified when the AADL website is online.');
-    } else {
-      alert('Registration failed. Please try again.');
+register.addEventListener('click', async () => {
+  if (!loading) {
+    loading = true;
+    const email = document.getElementById('email').value;
+    if (!email) {
+      alert('Please enter your email');
+      loading = false;
+      return;
     }
-  } catch (error) {
-    console.error('Error:', error);
-    alert('An error occurred. Please try again.');
+  
+    register.innerText = "Please wait...";
+  
+    try {
+      const token = await requestNotificationPermission();
+      console.log({ email, fcmToken: token });
+      const response = await fetch('https://aadl3.onrender.com/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, fcmToken: token }),
+      });
+  
+      if (response.ok) {
+        alert('Registered successfully! You will be notified when the AADL website is online.');
+      } else {
+        alert('Registration failed. Please try again.');
+      }
+      register.innerText = "Click to register";
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred. Please try again.');
+    }
+
+    loading = false;
   }
 });
 
