@@ -21,7 +21,7 @@ admin.initializeApp({
 
 // PostgreSQL setup
 const db = new Pool({
-  connectionString: process.env.db_local_url,
+  connectionString: "postgresql://aadl3_user:jxq9LlVDL9B9f9TyhhfMiukZUZLzrP1w@dpg-cq5g4508fa8c7386vpmg-a/aadl3",
   ssl: {
     rejectUnauthorized: false
   }
@@ -62,7 +62,7 @@ async function sendNotifications(message) {
 }
 
 async function main() {
-  console.log('Checking website status...');
+  console.log(`Checking website "${websiteUrl}" status...`);
   const isOnline = await checkWebsiteStatus(websiteUrl);
   
   if (isOnline) {
