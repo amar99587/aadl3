@@ -93,7 +93,7 @@ async function sendNotifications(message) {
 }
 
 async function main() {
-  console.log('Checking website status...');
+  console.log(`Checking website "${websiteUrl}" status...`);
   const isOnline = await checkWebsiteStatus(websiteUrl);
   
   if (isOnline) {
