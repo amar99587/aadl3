@@ -51,7 +51,6 @@ async function sendNotifications(message) {
       return;
     }
 
-    console.log(`Tokens : ${tokens.length}`, tokens);
     const response = await admin.messaging().sendMulticast({
       tokens: tokens,
       notification: {
