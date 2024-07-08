@@ -51,6 +51,7 @@ async function sendNotifications(message) {
       return;
     }
 
+    console.log(`Tokens length : ${tokens.length}`);
     const response = await admin.messaging().sendMulticast({
       tokens: tokens,
       notification: {
@@ -73,8 +74,7 @@ async function main() {
   const isOnline = await checkWebsiteStatus(websiteUrl);
   
   if (isOnline) {
-    console.log('Website is online.');
-    console.log('Sending notifications...');
+    console.log('Website is online.', 'Sending notifications...');
     await sendNotifications('AADL website is now online');
   } else {
     console.log('Website is offline.');
