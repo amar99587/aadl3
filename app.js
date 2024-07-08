@@ -18,6 +18,7 @@ const db = new Pool({
 // User registration
 app.post('/register', async (req, res) => {
   const { email, fcmToken } = req.body;
+  console.log(email);
   try {
     await db.query(
       'INSERT INTO users (email, fcm_token) VALUES ($1, $2) ON CONFLICT (email) DO UPDATE SET fcm_token = $2',
